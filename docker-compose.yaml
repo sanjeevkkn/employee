@@ -1,0 +1,32 @@
+version: "2"
+services:
+  app:
+    # image: golang:1.14.0-alpine
+    build: .
+    volumes:
+    #   - .\employee.go:/go/src/github.com/employee/employee.go
+    #   - .\vendor:/go/src/github.com/employee/vendor
+    #   - .\go.mod:/go/src/github.com/employee/go.mod
+    #   - .\go.sum:/go/src/github.com/employee/go.sum
+      - ..\employee:/go/src/github.com/employee
+    # working_dir: /go/src/github.com/employee
+    # command: go run employee.go
+    links:
+      - redis
+      - mongo
+    environment:
+      REDIS_URL: redis:6379
+    ports:
+      - 3000:3000
+  redis:
+    image: redis:alpine
+    # ports:
+    #   - 6379:6379
+  mongo:
+    image: mongo:latest
+    restart: always
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+
+  

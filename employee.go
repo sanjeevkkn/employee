@@ -61,7 +61,7 @@ func init() {
 	//Initializing redis
 	dsn := os.Getenv("REDIS_DSN")
 	if len(dsn) == 0 {
-		dsn = "localhost:6379"
+		dsn = "redis:6379"
 	}
 	client = redis.NewClient(&redis.Options{
 		Addr: dsn, //redis port
@@ -71,7 +71,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017")
 
 	// Connect to MongoDB
 	client1, err := mongo.Connect(context.TODO(), clientOptions)
@@ -609,6 +609,23 @@ func DeleteTokens(authD *AccessDetails) error {
 	return nil
 }
 
+// func Insert(chn chan Employee){
+// 	var employee *Employee
+
+// 			Select{
+// 				employee <- chn:
+// 			insertResult, err := collection.InsertOne(context.TODO(), emp)
+// 				if err != nil {
+// 					chn <-
+
+// 			}
+
+// 			}
+
+// 	}
+
+// }
+
 func DeleteAuth(givenUuid string) (int64, error) {
 	deleted, err := client.Del(ctx, givenUuid).Result()
 	if err != nil {
@@ -687,13 +704,18 @@ func main() {
 		}
 		emp.Active = true
 
-		// Insert a single document
-		insertResult, err := collection.InsertOne(context.TODO(), emp)
-		if err != nil {
+		// // Insert a single document
+		// chn := make(chan interface{})
+		// chn <- emp
+		// go Insert(chn)
+		insertResult, err1 := collection.InsertOne(context.TODO(), emp)
+		if err1 != nil {
+			fmt.Println("error is", err)
 			c.JSON(500, gin.H{
 				"status":  "Failure",
 				"message": "Error While Inserting Data",
 			})
+			return
 		}
 		fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 		c.JSON(200, gin.H{
@@ -738,10 +760,27 @@ func main() {
 		api.GET("/search/:term", SearchHandler)
 		api.PUT("/restore", RestoreHandler)
 		api.DELETE("/delete", DeleteHandler)
-		api.PUT("//update", UpdateHandler)
+		api.PUT("/update", UpdateHandler)
 
 	}
 
-	router.Run(":8080")
+	router.Run(":3000")
 
 }
+
+// package main
+
+// import "github.com/gin-gonic/gin"
+
+// func setupRouter() *gin.Engine {
+// 	r := gin.Default()
+// 	r.GET("/ping", func(c *gin.Context) {
+// 		c.String(200, "pong")
+// 	})
+// 	return r
+// }
+
+// func main() {
+// 	r := setupRouter()
+// 	r.Run(":8080")
+// }

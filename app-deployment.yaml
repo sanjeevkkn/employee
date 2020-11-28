@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: app
+    spec:
+      containers:
+      - args:
+        - go
+        - run
+        - employee.go
+        env:
+        - name: REDIS_URL
+          value: redis:6379
+        image: golang:1.14.0-alpine
+        imagePullPolicy: ""
+        name: app
+        ports:
+        - containerPort: 3000
+        resources: {}
+        volumeMounts:
+        - mountPath: /go/src/github.com/employee/employee.go
+          name: .\employee.go
+        - mountPath: /go/src/github.com/employee/vendor
+          name: .\vendor
+        - mountPath: /go/src/github.com/employee/go.mod
+          name: .\go.mod
+        - mountPath: /go/src/github.com/employee/go.sum
+          name: .\go.sum
+        workingDir: /go/src/github.com/employee
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: .\employee.go
+        persistentVolumeClaim:
+          claimName: .\employee.go
+      - name: .\vendor
+        persistentVolumeClaim:
+          claimName: .\vendor
+      - name: .\go.mod
+        persistentVolumeClaim:
+          claimName: .\go.mod
+      - name: .\go.sum
+        persistentVolumeClaim:
+          claimName: .\go.sum
+status: {}

@@ -23,14 +23,13 @@ jobs:
 
     - name: Get dependencies
       run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
+        go mod download
         fi
 
     - name: Build
       run: go build -v ./...
-
-    - name: Test
-      run: go test -v ./...
+    - name : Docker 
+      run : docker-compose up 
+#     - name: Test
+#       run: go test -v ./...
+      

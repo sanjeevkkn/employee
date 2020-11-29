@@ -32,11 +32,14 @@ jobs:
     - name: Build
       run: go build -v ./...
     
-    - name: Docker Build and Start the container
-      run: |
-          apt-get install docker-compose
-          docker-compose up
-          fi
+    -name : run
+      run:./employee
+    
+    # - name: Docker Build and Start the container
+    #   run: |
+    #       apt-get install docker-compose
+    #       docker-compose up
+    #       fi
 
 #     - name: Test
 #       run: go test -v ./...

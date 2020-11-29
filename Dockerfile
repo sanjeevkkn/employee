@@ -29,6 +29,7 @@ RUN go mod download
 # Copy the entire project and build it
 # This layer is rebuilt when a file changes in the project directory
 COPY . /go/src/employee/
+RUN go test
 RUN go build -o employee
 
 # This results in a single layer image

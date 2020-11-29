@@ -752,6 +752,9 @@ func main() {
 	})
 	router.POST("/refresh", RefreshHandler)
 	router.POST("/logout", LogoutHandler)
+	router.GET("/ping", func(c *gin.Context) {
+		c.String(200, "pong")
+	})
 
 	api := router.Group("/auth")
 	api.Use(Authorisation)
@@ -774,9 +777,9 @@ func main() {
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
+	// r.GET("/ping", func(c *gin.Context) {
+	// 	c.String(200, "pong")
+	// })
 	return r
 }
 

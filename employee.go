@@ -61,7 +61,7 @@ func init() {
 	//Initializing redis
 	dsn := os.Getenv("REDIS_DSN")
 	if len(dsn) == 0 {
-		dsn = "redis:6379"
+		dsn = "localhost:6379"
 	}
 	client = redis.NewClient(&redis.Options{
 		Addr: dsn, //redis port
@@ -71,7 +71,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017")
+	clientOptions := options.Client().ApplyURI("localhost://mongo:27017")
 
 	// Connect to MongoDB
 	client1, err := mongo.Connect(context.TODO(), clientOptions)
